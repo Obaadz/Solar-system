@@ -43,17 +43,18 @@ export const getUserById = async (id) => {
 };
 
 export async function enableTimerForUserById(id) {
-  chargerEnabledAt = Date.now();
-  const [isSuccess, errMessage, data] = await UserModel.updateOne(
+  const [isSuccess, errMessage, data] = await UserModel.findByIdAndUpdate(
     { _id: id },
-    { chargerEnabledAt }
+    { chargerEnabledAt: Date.now() },
+    { new: true }
   )
-    .then(() => {
-      return [true, "", { user: { chargerEnabledAt } }];
+    .select("-_id chargerEnabledAt")
+    .then((user) => {
+      return [true, "", { user }];
     })
     .catch((err) => [false, err.message]);
 
-  return { isSuccess, errMessage };
+  return { isSuccess, errMessage, data };
 }
 
 export async function resetAllUsersAvailability() {
