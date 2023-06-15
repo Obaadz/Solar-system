@@ -23,14 +23,16 @@ export default class DeviceController {
 
   static async changeCurrentUserOnDevice(req, res) {
     const newCurrentUserId = req.body.id;
+
     console.log("userId:", newCurrentUserId);
+
     try {
       const {
         isSuccess: isGetUserByIdSuccess,
         errMessage: errMessageForGetUserById,
         data: { newCurrentUser },
-      } = await getUserById(id);
-      console.log(newCurrentUser, "ATATATA");
+      } = await getUserById(newCurrentUserId);
+
       if (!isGetUserByIdSuccess) throw new Error(errMessageForGetUserById);
 
       const {
