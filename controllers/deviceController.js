@@ -1,7 +1,15 @@
 import { DEVICE_DEFAULT_ID } from "../index.js";
 import DeviceModel from "../models/device.js";
-import { getDeviceInformationById, changeDeviceUser } from "../services/device.js";
-import { enableTimerForUserById, getUserById } from "../services/user.js";
+import {
+  getDeviceInformationById,
+  changeDeviceUser,
+  removeCurrentUserFromDevice,
+} from "../services/device.js";
+import {
+  enableTimerForUserById,
+  getUserById,
+  disableAvailabilityForUserById,
+} from "../services/user.js";
 
 export default class DeviceController {
   static async getInformation(req, res) {
@@ -53,6 +61,35 @@ export default class DeviceController {
       res.send({ isSuccess: true, message: "OK" });
     } catch (err) {
       res.send({ isSuccess: false, message: err.message || "error" });
+    }
+  }
+
+  static async closeCharger(req, res) {
+    try {
+      const {
+        isSuccess: isGetDeviceInformationSuccess,
+        errMessage: errMessageForGetDeviceInformation,
+        data: { device },
+      } = getDeviceInformationById(DEVICE_DEFAULT_ID);
+
+      if (!isGetDeviceInformationSuccess || !device.currentUser)
+        throw new Error(errMessageForGetDeviceInformation);
+
+      const userOnDevice = device.currentUser;
+
+      await removeCurrentUserFromDevice(device);
+
+      const {
+        isSuccess: isDisableAvailabilitySuccess,
+        errMessage: errMessageForDisableAvailability,
+      } = await disableAvailabilityForUserById(userOnDevice._id);
+
+      if (!isDisableAvailabilitySuccess)
+        throw new Error(errMessageForDisableAvailability);
+
+      res.send({ isSuccess: true, message: "OK" });
+    } catch (err) {
+      res.send({ isSuccess: false, message: err.message });
     }
   }
 }

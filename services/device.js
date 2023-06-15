@@ -27,3 +27,7 @@ export async function changeDeviceUser(newUserId) {
 
   return { isSuccess, errMessage };
 }
+
+export async function removeCurrentUserFromDevice(device) {
+  await device.updateOne({ currentUser: null });
+}

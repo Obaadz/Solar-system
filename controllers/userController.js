@@ -1,4 +1,9 @@
-import { getUserByEmailAndPassword, insertUser, getUserById } from "../services/user.js";
+import {
+  getUserByEmailAndPassword,
+  insertUser,
+  getUserById,
+  resetAllUsersAvailability,
+} from "../services/user.js";
 
 export default class UserController {
   static async signup(req, res) {
@@ -76,5 +81,12 @@ export default class UserController {
         isSuccess: false,
       });
     }
+  }
+
+  static async resetAvailability(req, res) {
+    const { isSuccess, errMessage } = await resetAllUsersAvailability();
+
+    if (isSuccess) res.send({ isSuccess: true, message: "OK" });
+    else res.send({ isSuccess: false, message: errMessage });
   }
 }

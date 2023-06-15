@@ -54,3 +54,28 @@ export async function enableTimerForUserById(id) {
 
   return { isSuccess, errMessage };
 }
+
+export async function resetAllUsersAvailability() {
+  try {
+    const users = await UserModel.find({});
+
+    users.map(async (user) => {
+      await user.updateOne({ isAvailableToCharge: true, chargerEnabledAt: null });
+    });
+
+    return { isSuccess: true };
+  } catch (err) {
+    return { isSuccess: false, message: err.message };
+  }
+}
+
+export async function disableAvailabilityForUserById(id) {
+  const [isSuccess, errMessage] = await UserModel.updateOne(
+    { _id: id },
+    { isAvailableToCharge: false, chargerEnabledAt: null }
+  )
+    .then(() => [true, ""])
+    .catch((err) => [false, err.message]);
+
+  return { isSuccess, errMessage };
+}
