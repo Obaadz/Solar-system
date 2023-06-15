@@ -73,7 +73,7 @@ export default class DeviceController {
       } = await getDeviceInformationById(DEVICE_DEFAULT_ID);
 
       if (!isGetDeviceInformationSuccess || !device.currentUser)
-        throw new Error(errMessageForGetDeviceInformation);
+        throw new Error(errMessageForGetDeviceInformation || "deivce closed already");
 
       const userOnDevice = device.currentUser;
 
