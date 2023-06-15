@@ -32,6 +32,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isAvailableToCharge: { type: Boolean, default: true },
+  chargerEnabledAt: { type: Date, default: null },
 });
 
 const UserModel = mongoose.model("Users", userSchema);

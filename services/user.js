@@ -30,14 +30,26 @@ export const getUserByEmailAndPassword = async (email, password) => {
 };
 
 export const getUserById = async (id) => {
-  const [isSuccess, errMessage, data] = await UserModel.findById(id)
+  console.log("id in getUserById:", id);
+  const [isSuccess, errMessage, data] = await UserModel.findOne({ _id: id })
     .select("-password -__v")
     .then((user) => {
-      console.log("getUserById");
-
       return [true, "", { user }];
     })
     .catch((err) => [false, err.message]);
 
   return { isSuccess, errMessage, data };
 };
+
+export async function enableTimerForUserById(id) {
+  const [isSuccess, errMessage] = await UserModel.updateOne(
+    { _id: id },
+    { chargerEnabledAt: Date.now() }
+  )
+    .then(() => {
+      return [true, ""];
+    })
+    .catch((err) => [false, err.message]);
+
+  return { isSuccess, errMessage };
+}

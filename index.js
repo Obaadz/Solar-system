@@ -4,7 +4,8 @@ import cors from "cors";
 import v1Routes from "./routes/v1/index.js";
 import "dotenv/config";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000,
+  DEVICE_DEFAULT_ID = process.env.DEVICE_DEFAULT_ID;
 
 const app = express();
 const bodyParser = {
@@ -35,3 +36,4 @@ app.listen(PORT, () => {
 });
 
 export default app;
+export { DEVICE_DEFAULT_ID };

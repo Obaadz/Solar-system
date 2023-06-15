@@ -9,4 +9,4 @@ userRoutes.post("/users/signin", UserController.signin);
 
 userRoutes.get("/users", UserController.getOneById);
 
-export { userRoutes };
+export default userRoutes;
