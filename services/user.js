@@ -34,7 +34,8 @@ export const getUserById = async (id) => {
   const [isSuccess, errMessage, data] = await UserModel.findOne({ _id: id })
     .select("-password -__v")
     .then((user) => {
-      return [true, "", { user }];
+      if (user) return [true, "", { user }];
+      else return [false, "user not found"];
     })
     .catch((err) => [false, err.message]);
 
