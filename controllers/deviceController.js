@@ -41,8 +41,24 @@ export default class DeviceController {
         data: { user: newCurrentUser },
       } = await getUserById(newCurrentUserId);
 
-      if (!isGetUserByIdSuccess || !newCurrentUser.isAvailableToCharge)
+      if (
+        !isGetUserByIdSuccess ||
+        !newCurrentUser.isAvailableToCharge ||
+        newCurrentUser.chargerEnabledAt
+      )
         throw new Error(errMessageForGetUserById || "user not allowed to charge");
+
+      const {
+        isSuccess: isGetDeviceInformationSuccess,
+        errMessage: errMessageForGetDeviceInformation,
+        data: { device },
+      } = await getDeviceInformationById(DEVICE_DEFAULT_ID);
+
+      if (!isGetDeviceInformationSuccess || device.currentUser)
+        throw new Error(
+          errMessageForGetDeviceInformation ||
+            "there is another user on the same device at the same time"
+        );
 
       const {
         isSuccess: isChangeDeviceSuccess,
