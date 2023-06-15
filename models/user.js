@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   isAvailableToCharge: { type: Boolean, default: true },
-  chargerEnabledAt: { type: Date, default: null },
+  chargerEnabledAt: { type: Number, default: null },
 });
 
 const UserModel = mongoose.model("Users", userSchema);
