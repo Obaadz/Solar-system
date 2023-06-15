@@ -43,12 +43,13 @@ export const getUserById = async (id) => {
 };
 
 export async function enableTimerForUserById(id) {
-  const [isSuccess, errMessage] = await UserModel.updateOne(
+  chargerEnabledAt = Date.now();
+  const [isSuccess, errMessage, data] = await UserModel.updateOne(
     { _id: id },
-    { chargerEnabledAt: Date.now() }
+    { chargerEnabledAt }
   )
     .then(() => {
-      return [true, ""];
+      return [true, "", { user: { chargerEnabledAt } }];
     })
     .catch((err) => [false, err.message]);
 

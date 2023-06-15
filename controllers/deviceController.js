@@ -38,10 +38,11 @@ export default class DeviceController {
       const {
         isSuccess: isGetUserByIdSuccess,
         errMessage: errMessageForGetUserById,
-        data: { newCurrentUser },
+        data: { user: newCurrentUser },
       } = await getUserById(newCurrentUserId);
 
-      if (!isGetUserByIdSuccess) throw new Error(errMessageForGetUserById);
+      if (!isGetUserByIdSuccess || !newCurrentUser.isAvailableToCharge)
+        throw new Error(errMessageForGetUserById || "user not allowed to charge");
 
       const {
         isSuccess: isChangeDeviceSuccess,
@@ -53,12 +54,13 @@ export default class DeviceController {
       const {
         isSuccess: isEnableTimerForDeviceSuccess,
         errMessage: errMessageForEnableTimerForUserById,
+        data,
       } = await enableTimerForUserById(newCurrentUserId);
 
       if (!isEnableTimerForDeviceSuccess)
         throw new Error(errMessageForEnableTimerForUserById);
 
-      res.send({ isSuccess: true, message: "OK" });
+      res.send({ isSuccess: true, message: "OK", data });
     } catch (err) {
       res.send({ isSuccess: false, message: err.message || "error" });
     }
