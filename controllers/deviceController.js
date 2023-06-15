@@ -70,7 +70,7 @@ export default class DeviceController {
         isSuccess: isGetDeviceInformationSuccess,
         errMessage: errMessageForGetDeviceInformation,
         data: { device },
-      } = getDeviceInformationById(DEVICE_DEFAULT_ID);
+      } = await getDeviceInformationById(DEVICE_DEFAULT_ID);
 
       if (!isGetDeviceInformationSuccess || !device.currentUser)
         throw new Error(errMessageForGetDeviceInformation);

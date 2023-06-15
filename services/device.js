@@ -11,7 +11,6 @@ export async function getDeviceInformationById(id) {
       return [false, "something wrong"];
     })
     .catch((err) => [false, err.message]);
-
   return { isSuccess, errMessage, data };
 }
 
