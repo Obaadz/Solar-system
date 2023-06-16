@@ -9,7 +9,9 @@ import {
   enableTimerForUserById,
   getUserById,
   disableAvailabilityForUserById,
+  updateTimeRemainingForUserById,
 } from "../services/user.js";
+import secondsToHoursMinutesSeconds from "../utils/secondsToHoursMinutesSeconds.js";
 
 export default class DeviceController {
   static async getInformation(req, res) {
@@ -130,16 +132,35 @@ export default class DeviceController {
         data: { user },
       } = await getUserById(device.currentUser);
 
+      if (!isGetUserByIdSuccess)
+        throw new Error(errMessageForGetUserById || "user not allowed to charge");
+
       const noTimeRemainingForUser =
         user.timeRemaining &&
         user.timeRemaining.hours <= 0 &&
         user.timeRemaining.minutes <= 0 &&
         user.timeRemaining.seconds <= 0;
 
-      if (!isGetUserByIdSuccess || noTimeRemainingForUser)
-        throw new Error(errMessageForGetUserById || "user not allowed to charge");
-
+      if (noTimeRemainingForUser) await DeviceController.closeCharger(req, res);
       // TODO: update charger time for user in database...
+
+      const currentTime = Date.now();
+      const elapsedTime = currentTime - user.chargerEnabledAt;
+
+      const timeElapsed = secondsToHoursMinutesSeconds(parseInt(elapsedTime));
+      const newTimeRemaining = {
+        hours: user.timeRemaining.hours - timeElapsed.hours,
+        minutes: user.timeRemaining.minutes - timeElapsed.minutes,
+        seconds: user.timeRemaining.seconds - timeElapsed.seconds,
+      };
+
+      const {
+        isSuccess: isUpdateTimeRemainingSuccess,
+        errMessage: errMessageForUpdateTimeRemaining,
+      } = await updateTimeRemainingForUserById(user._id, newTimeRemaining);
+
+      if (!isUpdateTimeRemainingSuccess)
+        throw new Error(errMessageForUpdateTimeRemaining);
 
       res.send({ isSuccess: true, message: "OK" });
     } catch (err) {

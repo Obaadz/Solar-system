@@ -98,3 +98,14 @@ export async function disableAvailabilityForUserById(id) {
 
   return { isSuccess, errMessage };
 }
+
+export async function updateTimeRemainingForUserById(id, timeRemaining) {
+  const [isSuccess, errMessage] = await UserModel.updateOne(
+    { _id: id },
+    { timeRemaining }
+  )
+    .then(() => [true, ""])
+    .catch((err) => [false, err.message]);
+
+  return { isSuccess, errMessage };
+}
