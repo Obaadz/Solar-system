@@ -142,7 +142,6 @@ export default class DeviceController {
         user.timeRemaining.seconds <= 0;
 
       if (noTimeRemainingForUser) await DeviceController.closeCharger(req, res);
-      // TODO: update charger time for user in database...
 
       const currentTime = Date.now();
       const elapsedTime = currentTime - user.chargerEnabledAt;

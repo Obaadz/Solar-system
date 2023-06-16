@@ -102,7 +102,10 @@ export async function disableAvailabilityForUserById(id) {
 export async function updateTimeRemainingForUserById(id, timeRemaining) {
   const [isSuccess, errMessage] = await UserModel.updateOne(
     { _id: id },
-    { timeRemaining }
+    {
+      chargerEnabledAt: Date.now(),
+      timeRemaining,
+    }
   )
     .then(() => [true, ""])
     .catch((err) => [false, err.message]);
