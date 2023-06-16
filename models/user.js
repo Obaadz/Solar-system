@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   isAvailableToCharge: { type: Boolean, default: true },
-  chargerEnabledAt: { type: Number, default: null },
+  chargerEnabledAt: { type: Number, default: 0 },
   timeRemaining: {
     _id: false,
     type: {

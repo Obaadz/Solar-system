@@ -65,7 +65,7 @@ export async function resetAllUsersAvailability() {
     users.map(async (user) => {
       await user.updateOne({
         isAvailableToCharge: true,
-        chargerEnabledAt: null,
+        chargerEnabledAt: 0,
         timeRemaining: {
           hours: DEFAULT_HOURS,
           minutes: DEFAULT_MINUTES,
@@ -85,7 +85,7 @@ export async function disableAvailabilityForUserById(id) {
     { _id: id },
     {
       isAvailableToCharge: false,
-      chargerEnabledAt: null,
+      chargerEnabledAt: 0,
       timeRemaining: {
         hours: 0,
         minutes: 0,
