@@ -143,10 +143,10 @@ export default class DeviceController {
 
       if (noTimeRemainingForUser) await DeviceController.closeCharger(req, res);
 
-      const currentTime = Date.now();
-      const elapsedTime = currentTime - user.chargerEnabledAt;
+      const currentTimeInMS = Date.now();
+      const elapsedTimeInMS = currentTimeInMS - user.chargerEnabledAt;
 
-      const timeElapsed = secondsToHoursMinutesSeconds(parseInt(elapsedTime));
+      const timeElapsed = secondsToHoursMinutesSeconds(parseInt(elapsedTimeInMS / 1000));
       const newTimeRemaining = {
         hours: user.timeRemaining.hours - timeElapsed.hours,
         minutes: user.timeRemaining.minutes - timeElapsed.minutes,
