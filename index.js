@@ -7,9 +7,9 @@ import "dotenv/config";
 const PORT = process.env.PORT || 5000,
   DEVICE_DEFAULT_ID = process.env.DEVICE_DEFAULT_ID;
 
-const DEFAULT_HOURS = 0,
-  DEFAULT_MINUTES = 3,
-  DEFAULT_SECONDS = 10;
+const DEFAULT_HOURS = process.env.DEFAULT_HOURS || 0,
+  DEFAULT_MINUTES = process.env.DEFAULT_MINUTES || 3,
+  DEFAULT_SECONDS = process.env.DEFAULT_SECONDS || 10;
 
 const app = express();
 const bodyParser = {

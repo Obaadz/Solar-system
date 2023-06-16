@@ -42,9 +42,9 @@ const userSchema = new mongoose.Schema({
       seconds: Number,
     },
     default: {
-      hours: DEFAULT_HOURS,
-      minutes: DEFAULT_MINUTES,
-      seconds: DEFAULT_SECONDS,
+      hours: 0,
+      minutes: 10,
+      seconds: 3,
     },
   },
 });
