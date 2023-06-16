@@ -91,7 +91,7 @@ export default class DeviceController {
       } = await getDeviceInformationById(DEVICE_DEFAULT_ID);
 
       if (!isGetDeviceInformationSuccess || !device.currentUser)
-        throw new Error(errMessageForGetDeviceInformation || "deivce closed already");
+        throw new Error(errMessageForGetDeviceInformation || "device closed already");
 
       const userOnDevice = device.currentUser;
 
@@ -108,6 +108,42 @@ export default class DeviceController {
       res.send({ isSuccess: true, message: "OK" });
     } catch (err) {
       res.send({ isSuccess: false, message: err.message });
+    }
+  }
+
+  static async updateChargerTimeForUser(req, res) {
+    try {
+      const {
+        isSuccess: isGetDeviceInformationSuccess,
+        errMessage: errMessageForGetDeviceInformation,
+        data: { device },
+      } = await getDeviceInformationById(DEVICE_DEFAULT_ID);
+
+      if (!isGetDeviceInformationSuccess || !device.currentUser)
+        throw new Error(
+          errMessageForGetDeviceInformation || "there is no current user on device now"
+        );
+
+      const {
+        isSuccess: isGetUserByIdSuccess,
+        errMessage: errMessageForGetUserById,
+        data: { user },
+      } = await getUserById(device.currentUser);
+
+      const noTimeRemainingForUser =
+        user.timeRemaining &&
+        user.timeRemaining.hours <= 0 &&
+        user.timeRemaining.minutes <= 0 &&
+        user.timeRemaining.seconds <= 0;
+
+      if (!isGetUserByIdSuccess || noTimeRemainingForUser)
+        throw new Error(errMessageForGetUserById || "user not allowed to charge");
+
+      // TODO: update charger time for user in database...
+
+      res.send({ isSuccess: true, message: "OK" });
+    } catch (err) {
+      res.send({ isSuccess: false, message: err.message || "error" });
     }
   }
 }

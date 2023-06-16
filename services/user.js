@@ -1,3 +1,4 @@
+import { DEFAULT_HOURS, DEFAULT_MINUTES, DEFAULT_SECONDS } from "../index.js";
 import UserModel from "../models/user.js";
 
 export const insertUser = async (userData) => {
@@ -48,7 +49,7 @@ export async function enableTimerForUserById(id) {
     { chargerEnabledAt: Date.now() },
     { new: true }
   )
-    .select("-_id chargerEnabledAt")
+    .select("-_id -password -__v")
     .then((user) => {
       return [true, "", { user }];
     })
@@ -62,7 +63,15 @@ export async function resetAllUsersAvailability() {
     const users = await UserModel.find({});
 
     users.map(async (user) => {
-      await user.updateOne({ isAvailableToCharge: true, chargerEnabledAt: null });
+      await user.updateOne({
+        isAvailableToCharge: true,
+        chargerEnabledAt: null,
+        timeRemaining: {
+          hours: DEFAULT_HOURS,
+          minutes: DEFAULT_MINUTES,
+          seconds: DEFAULT_SECONDS,
+        },
+      });
     });
 
     return { isSuccess: true };
@@ -74,7 +83,15 @@ export async function resetAllUsersAvailability() {
 export async function disableAvailabilityForUserById(id) {
   const [isSuccess, errMessage] = await UserModel.updateOne(
     { _id: id },
-    { isAvailableToCharge: false, chargerEnabledAt: null }
+    {
+      isAvailableToCharge: false,
+      chargerEnabledAt: null,
+      timeRemaining: {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+      },
+    }
   )
     .then(() => [true, ""])
     .catch((err) => [false, err.message]);

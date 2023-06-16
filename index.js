@@ -7,6 +7,10 @@ import "dotenv/config";
 const PORT = process.env.PORT || 5000,
   DEVICE_DEFAULT_ID = process.env.DEVICE_DEFAULT_ID;
 
+const DEFAULT_HOURS = 0,
+  DEFAULT_MINUTES = 3,
+  DEFAULT_SECONDS = 10;
+
 const app = express();
 const bodyParser = {
   urlencoded: express.urlencoded({ limit: "30mb", extended: true }),
@@ -36,4 +40,4 @@ app.listen(PORT, () => {
 });
 
 export default app;
-export { DEVICE_DEFAULT_ID };
+export { DEVICE_DEFAULT_ID, DEFAULT_HOURS, DEFAULT_MINUTES, DEFAULT_SECONDS };
