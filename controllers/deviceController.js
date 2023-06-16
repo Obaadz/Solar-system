@@ -11,7 +11,8 @@ import {
   disableAvailabilityForUserById,
   updateTimeRemainingForUserById,
 } from "../services/user.js";
-import secondsToHoursMinutesSeconds from "../utils/secondsToHoursMinutesSeconds.js";
+import hoursMinutesSecondsToMilliSeconds from "../utils/hoursMinutesSecondsToMilliSeconds.js";
+import milliSecondsToHoursMinutesSeconds from "../utils/milliSecondsToHoursMinutesSeconds.js";
 
 export default class DeviceController {
   static async getInformation(req, res) {
@@ -146,12 +147,9 @@ export default class DeviceController {
       const currentTimeInMS = Date.now();
       const elapsedTimeInMS = currentTimeInMS - user.chargerEnabledAt;
 
-      const timeElapsed = secondsToHoursMinutesSeconds(parseInt(elapsedTimeInMS / 1000));
-      const newTimeRemaining = {
-        hours: user.timeRemaining.hours - timeElapsed.hours,
-        minutes: user.timeRemaining.minutes - timeElapsed.minutes,
-        seconds: user.timeRemaining.seconds - timeElapsed.seconds,
-      };
+      const newTimeRemainingInMS =
+        hoursMinutesSecondsToMilliSeconds(user.timeRemaining) - elapsedTimeInMS;
+      const newTimeRemaining = milliSecondsToHoursMinutesSeconds(newTimeRemainingInMS);
 
       const {
         isSuccess: isUpdateTimeRemainingSuccess,
