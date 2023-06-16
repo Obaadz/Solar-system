@@ -67,9 +67,9 @@ export async function resetAllUsersAvailability() {
         isAvailableToCharge: true,
         chargerEnabledAt: 0,
         timeRemaining: {
-          hours: DEFAULT_HOURS,
-          minutes: DEFAULT_MINUTES,
-          seconds: DEFAULT_SECONDS,
+          hours: 0,
+          minutes: 10,
+          seconds: 3,
         },
       });
     });
