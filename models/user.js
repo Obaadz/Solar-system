@@ -44,8 +44,8 @@ const userSchema = new mongoose.Schema({
     },
     default: {
       hours: 0,
-      minutes: 10,
-      seconds: 3,
+      minutes: 59,
+      seconds: 59,
     },
   },
 });
